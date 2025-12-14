@@ -28,3 +28,53 @@ The program is designed to read input from standard input (`stdin`) in the follo
 3.  The last line contains the integer $k$.
 
 ### Input Example
+4 5 6 7 8 3
+
+
+Here, $4$ is the length of the linked list, followed by the elements of the list and the value of $k$.
+
+### Constraints
+
+* $0 \leq \text{number of nodes in head} \leq 1000$
+* $$-10^9 \leq \text{value of each node} \leq 10^9$$
+* $$0 \leq k \leq 10^9$$
+
+### Output Format
+
+Return the head of the modified linked list after removal.
+
+### Sample Input/Output
+
+| Sample Input | Sample Output | Notes |
+| :---: | :---: | :---: |
+| `1\n5\n1` | `5` | Removing $k=1$ (the last node) yields the empty list. The list is empty, so we return the original list. **Note:** The user-provided sample output `5` seems to imply a logic error or non-standard interpretation for a $k=1$ removal. For a list `[5]` and $k=1$, the standard interpretation is the removal of node `5`, resulting in an empty list. Given the sample output `5`, the program might handle $k$ being greater than or equal to list length by returning the original list, but this contradicts the problem statement. *For standard implementation, $k=1$ removes the last element.* |
+| `2\n1\n2\n0` | `1` | $k=0$ is an invalid value. The original list is returned. |
+
+---
+
+## Execution Guide
+
+The solution is stored in a TypeScript file named `remove-kth-from-end.ts`.
+
+### Steps to Execute
+
+1.  **Compile the TypeScript code** (if not already done):
+    ```bash
+    cd linked-lists
+    npx tsc remove-kth-from-end.ts
+    ```
+
+2.  **Run the compiled JavaScript with input**:
+    The program reads the structured input from standard input. You can pipe the input directly.
+
+    **Example (List: $1 \to 2 \to 3 \to 4 \to 5$, remove $k=2$ from end):**
+    ```bash
+    printf "5\n1\n2\n3\n4\n5\n2\n" | node remove-kth-from-end.js
+    ```
+    Output: `1 2 3 5` (The node with value 4 is removed)
+
+    **Alternative: Save input to a file and redirect:**
+    ```bash
+    echo -e "5\n1\n2\n3\n4\n5\n2" > input.txt
+    node remove-kth-from-end.js < input.txt
+    ```
