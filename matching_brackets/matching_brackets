@@ -1,0 +1,92 @@
+'use strict';
+
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+
+let inputString = '';
+let currentLine = 0;
+
+process.stdin.on('data', function(inputStdin) {
+    inputString += inputStdin;
+});
+
+process.stdin.on('end', function() {
+    inputString = inputString.split('\n');
+
+    main();
+});
+
+function readLine() {
+    return inputString[currentLine++];
+}
+
+
+
+/*
+ * Complete the 'areBracketsProperlyMatched' function below.
+ *
+ * The function is expected to return a BOOLEAN.
+ * The function accepts STRING code_snippet as parameter.
+ */
+
+function areBracketsProperlyMatched(code_snippet) {
+    // Edge empty ok
+    // Edge none ok
+    // Arrays bc, bq, bs, activeType
+    // Can't close more than open
+    // Must close all
+    // Must close active type i.e. most recently opened
+    // if (a [])
+    if (code_snippet.length === 0) return 1;
+    const regex = /[\(\)\{\}\[\]]/;
+    // if (code_snippet.indexOf('(') > code_snippet.indexOf(')')) return 0;
+    // if (code_snippet.indexOf('{') > code_snippet.indexOf('}')) return 0;
+    // if (code_snippet.indexOf('[') > code_snippet.indexOf(']')) return 0;
+    // if (code_snippet.lastIndexOf('(') > code_snippet.lastIndexOf(')')) return 0;
+    // if (code_snippet.lastIndexOf('{') > code_snippet.lastIndexOf('}')) return 0;
+    // if (code_snippet.lastIndexOf('[') > code_snippet.lastIndexOf(']')) return 0;
+    if (code_snippet.search(regex) === -1) return 1;
+    let bc = [], bb = [], bs = [];
+    let activeType = null;
+    let activeTypeArr = [];
+    for (let char of code_snippet) {
+        switch (char) {
+            case '(':
+                activeType = 'curve';
+                activeTypeArr.push(activeType);
+                bc.push('(');
+                break;
+            case '{':
+                activeType = 'brace';
+                activeTypeArr.push(activeType);
+                bb.push('{');
+                break;
+            case '[':
+                activeType = 'square';
+                activeTypeArr.push(activeType);
+                bs.push('[');
+                break;
+            case ')':
+                if (activeTypeArr[activeTypeArr.length - 1] !== 'curve' || activeType === null) return 0;
+                activeTypeArr.pop();
+                if (!bc.pop()) return 0;
+                break;
+            case '}':
+                if (activeTypeArr[activeTypeArr.length - 1] !== 'brace' || activeType === null) return 0;
+                activeTypeArr.pop();
+                if (!bb.pop()) return 0;
+                break;
+            case ']':
+                if (activeTypeArr[activeTypeArr.length - 1] !== 'square' || activeType === null) return 0;
+                activeTypeArr.pop();
+                if (!bs.pop()) return 0;
+                break;
+            default:
+                // do nothing                
+        }        
+    }
+    return !bc.length && !bb.length && !bs.length ? 1 : 0
+}
+
+const code_snippet = '([a])';
+console.log(areBracketsProperlyMatched(code_snippet))
