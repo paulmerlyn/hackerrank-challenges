@@ -16,7 +16,7 @@ const zeroOut = mat => {
   for (let i = 0; i < M; i++) {
     for (let j = 0; j < N; j++) {
       // check maps
-      if (zerosMapRows.get(i) || zerosMapCols.get(j)) {
+      if (zerosMapRows.get(i) || zerosMapCols(j)) {
         mat[i][j] = 0
       }
     }
