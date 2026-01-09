@@ -5,8 +5,9 @@ class SinglyLinkedListStack {
     this.arr = new Array(arrSize)
     this.stackSize = Math.floor(arrSize/stackCount)
     this.pointers = new Map()
+    // Initialize pointers to the start of each stack's section
     for (let i = 1; i <= stackCount; i++) {
-      this.pointers.set(`p${i}`, -1)
+      this.pointers.set(`p${i}`, (i - 1) * this.stackSize - 1)
     }
     console.log(this.pointers)
   }
@@ -15,39 +16,35 @@ class SinglyLinkedListStack {
     return this.pointers.get(`p${stackNum}`)
   }
 
-  // Decrement after pop()
-  decrementStackPointer(stackNum) {
-    const stackFactor = (stackNum - 1) * this.stackSize
-    const pointer = this.pointers.get(`p${stackNum}`)
-    const pointerNew = (pointer - 1) % this.stackSize + stackFactor
-    this.pointers.set(`p${stackNum}`, pointerNew)
-  }
-
-  // Increment after push()
-  incrementStackPointer(stackNum) {
-    const stackFactor = (stackNum - 1) * this.stackSize
-    const pointer = this.pointers.get(`p${stackNum}`)
-    const pointerNew = (pointer + 1) % this.stackSize + stackFactor
-    this.pointers.set(`p${stackNum}`, pointerNew)
-  }
-
   push(val, stackNum) {
-    try {
-      if (stackNum > this.stackSize) throw new Error(`Unsupported stackNum; stack must be no greater than ${this.stackSize}`)
-      this.incrementStackPointer(stackNum)
-      const pointer = this.getPointer(stackNum)
-      this.arr[pointer] = val
-      console.log(`We just assigned arr[${pointer}] to value: ${val} inside push()`)
-    } catch(e) {
-      console.log("Unsupported stackNum!")
+    if (stackNum > 3) throw new Error(`Unsupported stackNum; stack must be 1, 2, or 3`)
+    
+    const stackStart = (stackNum - 1) * this.stackSize
+    const pointer = this.pointers.get(`p${stackNum}`)
+    
+    if (pointer >= stackStart + this.stackSize - 1) {
+      throw new Error(`Stack ${stackNum} overflow`)
     }
+    
+    const newIndex = pointer + 1
+    this.arr[newIndex] = val
+    this.pointers.set(`p${stackNum}`, newIndex)
+    console.log(`We just assigned arr[${newIndex}] to value: ${val} inside push()`)
   }
 
   pop(stackNum) {
-    if (stackNum > this.stackSize) throw new Error(`Unsupported stackNum; stack must be no greater than ${this.stackSize}`)
-    const val = this.arr[this.getPointer(stackNum)]
-    delete this.arr[this.getPointer(stackNum)]
-    this.decrementStackPointer(stackNum)
+    if (stackNum > 3) throw new Error(`Unsupported stackNum; stack must be 1, 2, or 3`)
+    
+    const stackStart = (stackNum - 1) * this.stackSize
+    const pointer = this.pointers.get(`p${stackNum}`)
+    
+    if (pointer < stackStart) {
+      throw new Error(`Stack ${stackNum} is empty`)
+    }
+    
+    const val = this.arr[pointer]
+    this.arr[pointer] = undefined
+    this.pointers.set(`p${stackNum}`, pointer - 1)
     return val
   }
 }
@@ -61,21 +58,33 @@ class SinglyLinkedListStack {
 // printSinglyLinkedList(myStack.head, "\n")
 // console.log("\nPop from stack:", myStack.popRemoveNode().data)
 
-const myStack = new SinglyLinkedListStack(18, 3)
-console.log(myStack)
-myStack.push(1, 1)
-myStack.push(2, 2)
-myStack.push(3, 3)
-myStack.push(5, 1)
-myStack.pop(1)
-myStack.push(2, 1)
-myStack.push(3, 1)
-myStack.push(4, 1)
-myStack.push(5, 1)
-myStack.push(6, 1)
-myStack.push(7, 1)
-myStack.push(8, 4)
-console.log(myStack)
+const myStack1 = new SinglyLinkedListStack(18, 3)
+console.log("\nTest case for myStack1", myStack1)
+myStack1.push(1, 1)
+myStack1.push(2, 2)
+myStack1.push(3, 3)
+myStack1.push(5, 1)
+myStack1.pop(1)
+myStack1.push(2, 1)
+myStack1.push(3, 1)
+myStack1.push(4, 1)
+console.log(myStack1)
+
+const myStack2 = new SinglyLinkedListStack(18, 3)
+console.log("\nTest case for myStack2 should produce a stack overflow error", myStack2)
+myStack2.push(1, 1)
+myStack2.push(2, 2)
+myStack2.push(3, 3)
+myStack2.push(5, 1)
+myStack2.pop(1)
+myStack2.push(2, 1)
+myStack2.push(3, 1)
+myStack2.push(4, 1)
+myStack2.push(5, 1)
+myStack2.push(6, 1)
+myStack2.push(7, 1)
+myStack2.push(8, 4)
+console.log(myStack2)
 
 /*
 0-5      -1
