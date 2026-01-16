@@ -35,3 +35,10 @@ When adding node value 4, we mark node's metadata as min(stack head 3, value 4) 
 
 When popping node value 4, 
 
+Push 3  existing_min is min(existing_min, 3) = 3
+Push 2  existing_min is min(existing_min [3], 2) = 2
+Push 4  existing_min is min(existing_min [2], 4) = 2
+Push 2  existing_min is min(existing_min [2], 2) = 2
+Pop 2   => min is 2
+Pop 4   => min is 2
+Pop 2   => min is 3
